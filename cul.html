@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สรุปพอดแคสต์: เรื่อง วัฒนธรรมองค์การ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary-color: #0d9488;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-bg: #f0fdf4;
+            --accent-border: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.8;
+            font-size: 16px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 40px 35px;
+        }
+
+        .paragraph {
+            margin-bottom: 24px;
+            text-align: justify;
+            text-justify: inter-word;
+            text-indent: 2em;
+            color: #334155;
+            font-size: 1.05rem;
+        }
+
+        .quote-box {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #475569;
+        }
+
+        .highlight-card {
+            background-color: var(--accent-bg);
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 30px 0;
+        }
+
+        .highlight-card h3 {
+            color: #15803d;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer {
+            background-color: #f1f5f9;
+            border-top: 1px solid var(--border-color);
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px auto;
+                border-radius: 12px;
+            }
+            .header {
+                padding: 30px 20px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .content {
+                padding: 25px 20px;
+            }
+            .paragraph {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="badge">พอดแคสต์พฤติกรรมองค์การ</span>
+            <h1>เรื่อง วัฒนธรรมองค์การ</h1>
+            <p>บรรยายโดย ผู้ช่วยศาสตราจารย์ ดร.ชัชราวรรณ | รายการ Science in Story</p>
+        </div>
+
+        <div class="content">
+            <p class="paragraph">
+                วัฒนธรรมองค์กรเปรียบเสมือนจิตวิญญาณและบรรยากาศขององค์กร ที่เป็นตัวกำหนดว่าคนในที่ทำงานจะคิด จะพูด และจะทำงานร่วมกันอย่างไร วัฒนธรรมไม่ได้คงอยู่เพียงแค่ในกฎระเบียบหรือเอกสารที่บันทึกไว้เท่านั้น แต่ยังแฝงอยู่ในทัศนคติ วิธีคิด และความรู้สึกของคนในองค์กร ซึ่งถูกถ่ายทอดจากรุ่นสู่รุ่นโดยธรรมชาติ จุดเริ่มต้นของวัฒนธรรมองค์กรนั้นมีรากฐานมาจากผู้บริหารหรือผู้ก่อตั้ง ที่เป็นผู้สร้างวิสัยทัศน์ ความเชื่อ และค่านิยมขึ้นมา หากแนวคิดเหล่านี้สามารถนำพาองค์กรไปสู่ความสำเร็จ ค่านิยมดังกล่าวจะได้รับการยอมรับและสืบทอดกันต่อจนกลายเป็นวัฒนธรรมขององค์กรในที่สุด
+            </p>
+
+            <div class="quote-box">
+                "ถ้าเราลองมององค์กรเหมือนกับบ้านหลังหนึ่ง วัฒนธรรมองค์กรก็คือบรรยากาศ ความเชื่อ ค่านิยม และพฤติกรรมที่คนในบ้านนั้นใช้ร่วมกัน"
+            </div>
+
+            <p class="paragraph">
+                หน้าที่หลักของวัฒนธรรมองค์กรมีอยู่ 2 ประการ ประการแรกคือการสร้างความเป็นหนึ่งเดียวภายในองค์กร (Internal Integration) เพื่อให้ทุกคนมีความเชื่อและค่านิยมร่วมกันจนทำงานไปในทิศทางเดียวกันอย่างราบรื่น และประการที่สองคือการช่วยให้องค์กรปรับตัวเข้ากับสิ่งแวดล้อมภายนอก (External Adaptation) ทั้งนี้ในองค์กรขนาดใหญ่ เรามักจะพบทั้งวัฒนธรรมหลัก (Core Culture) ซึ่งเป็นค่านิยมที่ทุกคนยึดถือร่วมกัน เช่น ความซื่อสัตย์ ความรับผิดชอบ หรือการมุ่งเน้นลูกค้า ควบคู่ไปกับวัฒนธรรมย่อย (Subculture) ที่อาจแตกต่างกันไปตามแต่ละแผนก เช่น ฝ่ายการตลาดเน้นความเปิดกว้างสร้างสรรค์ ในขณะที่ฝ่ายบัญชีเน้นความละเอียดรอบคอบ
+            </p>
+
+            <p class="paragraph">
+                สำหรับองค์กรที่มีวัฒนธรรมเข้มแข็ง สมาชิกส่วนใหญ่จะให้การยอมรับและปฏิบัติไปในทิศทางเดียวกัน กลายเป็นพลังขับเคลื่อนให้องค์กรมีเอกลักษณ์ที่ชัดเจน อย่างไรก็ตาม ผู้บริหารจำเป็นต้องระมัดระวัง เพราะวัฒนธรรมที่เข้มแข็งจนเกินไปอาจทำให้บุคลากรใหม่ปรับตัวได้ยากหรือปิดกั้นนวัตกรรมใหม่ๆ โดยเราสามารถเข้าใจและสังเกตวัฒนธรรมขององค์กรได้ผ่านทางสัญลักษณ์ โลโก้ เรื่องราวเล่าขาน เพลงประจำองค์กร พิธีการต่างๆ ภาษาที่ใช้สื่อสาร ตลอดจนบุคคลต้นแบบหรือวีรบุรุษขององค์กร
+            </p>
+
+            <div class="highlight-card">
+                <h3>💡 วัฒนธรรมองค์กรในยุคดิจิทัล</h3>
+                <p>ควรมุ่งเน้นการเปิดโอกาสให้บุคลากรมีอำนาจในการตัดสินใจ (Empowerment) และยอมรับความหลากหลาย (Diversity) ทั้งด้านอายุ เพศ เชื้อชาติ และประสบการณ์ เพื่อเปิดพื้นที่ให้แสดงศักยภาพได้อย่างเท่าเทียม</p>
+            </div>
+
+            <p class="paragraph">
+                ในยุคปัจจุบันที่เทคโนโลยีและบริบทภายนอกเปลี่ยนแปลงไปอย่างรวดเร็ว การปรับเปลี่ยนวัฒนธรรมองค์กรจึงเป็นสิ่งจำเป็น แม้จะเป็นงานที่ท้าทายเนื่องจากเกี่ยวข้องกับความเชื่อและพฤติกรรมของคนที่ไม่อาจเปลี่ยนได้ในชั่วข้ามคืน แต่ผู้บริหารสามารถทำได้โดยการสื่อสารให้ชัดเจน ให้เวลา และสร้างความไว้วางใจ โดยเฉพาะอย่างยิ่งในยุคดิจิทัล วัฒนธรรมองค์กรที่ดีควรเปิดโอกาสให้คนมีอำนาจในการตัดสินใจ (Empowerment) และยอมรับความหลากหลาย (Diversity) ทั้งในด้านอายุ เพศ เชื้อชาติ และประสบการณ์ เพื่อเปิดพื้นที่ให้ทุกคนได้แสดงศักยภาพอย่างเท่าเทียม สุดท้ายนี้ วัฒนธรรมองค์กรไม่ได้เกิดขึ้นจากคำพูดของผู้บริหารเพียงอย่างเดียว แต่เกิดจากการกระทำในทุกๆ วันของทุกคนในองค์กร ซึ่งจะช่วยให้องค์กรเติบโตได้อย่างมั่นคงและยั่งยืน
+            </p>
+        </div>
+
+        <div class="footer">
+            <p>ที่มา: พอดแคสต์ "เรื่อง วัฒนธรรมองค์การ" โดยรายการ Science in Story</p>
+            <p><a href="http://www.youtube.com/watch?v=4Ik81Y8FvKw" target="_blank">รับชมวิดีโอต้นฉบับบน YouTube</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

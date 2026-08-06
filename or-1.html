@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สรุปพอดแคสต์: พฤติกรรมองค์การ บทที่ 1 ภาพรวมวิชาพฤติกรรมองค์การ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary-color: #0d9488;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-bg: #f0fdf4;
+            --accent-border: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.8;
+            font-size: 16px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 40px 35px;
+        }
+
+        .paragraph {
+            margin-bottom: 24px;
+            text-align: justify;
+            text-justify: inter-word;
+            text-indent: 2em;
+            color: #334155;
+            font-size: 1.05rem;
+        }
+
+        .quote-box {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #475569;
+        }
+
+        .highlight-card {
+            background-color: var(--accent-bg);
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 30px 0;
+        }
+
+        .highlight-card h3 {
+            color: #15803d;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer {
+            background-color: #f1f5f9;
+            border-top: 1px solid var(--border-color);
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px auto;
+                border-radius: 12px;
+            }
+            .header {
+                padding: 30px 20px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .content {
+                padding: 25px 20px;
+            }
+            .paragraph {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="badge">พอดแคสต์พฤติกรรมองค์การ</span>
+            <h1>บทที่ 1 ภาพรวมวิชาพฤติกรรมองค์การ</h1>
+            <p>บรรยายโดย ผู้ช่วยศาสตราจารย์ ดร.ชัชราวรรณ มีทรัพย์ทอง | รายการ Science in Story</p>
+        </div>
+
+        <div class="content">
+            <p class="paragraph">
+                ยินดีต้อนรับเข้าสู่โลกของวิชาพฤติกรรมองค์การ หรือที่นิยมเรียกว่า OB ซึ่งย่อมาจาก Organizational Behavior หากจะอธิบายให้เข้าใจได้ง่ายที่สุด OB คือวิชาที่ช่วยให้เราเข้าใจพฤติกรรมของมนุษย์ในที่ทำงาน ไม่ว่าจะเป็นเพื่อนร่วมงาน ผู้บังคับบัญชา หรือแม้แต่ตัวเราเอง ว่าเหตุใดจึงแสดงพฤติกรรมบางอย่างออกมา วิชา OB สามารถตอบคำถามเหล่านี้ได้ ทั้งกรณีที่บางวันเรามีไฟในการทำงาน แต่บางวันกลับรู้สึกหมดไฟ หรือทำไมบางทีมจึงทำงานร่วมกันได้อย่างราบรื่นและมีความสุข ในขณะที่บางทีมเต็มไปด้วยความขัดแย้ง
+            </p>
+
+            <div class="quote-box">
+                "OB คือวิชาที่ทำหน้าที่เชื่อมโยงความเข้าใจระหว่างคน ทีม และองค์กร ช่วยให้เรามองเห็นเหตุผลเบื้องหลังของทุกพฤติกรรมในสถานที่ทำงานได้อย่างชัดเจน"
+            </div>
+
+            <p class="paragraph">
+                ในการศึกษาพฤติกรรมองค์การ จะแบ่งโครงสร้างการศึกษาออกเป็น 3 ระดับอย่างครอบคลุม ได้แก่ ระดับแรกคือ **ระดับบุคคล** ซึ่งเน้นการศึกษาคุณลักษณะเฉพาะตัว เช่น บุคลิกภาพ แรงจูงใจ และกระบวนการคิด ระดับที่สองคือ **ระดับกลุ่ม** ซึ่งศึกษาพฤติกรรมของมนุษย์เมื่อต้องทำงานร่วมกับผู้อื่น เช่น การทำงานเป็นทีม การสื่อสาร และความขัดแย้งระหว่างกัน และระดับที่สามคือ **ระดับองค์การ** ซึ่งเป็นการมองในภาพรวม ได้แก่ วัฒนธรรมองค์กร โครงสร้างการทำงาน กฎระเบียบ และวิสัยทัศน์ของผู้นำ
+            </p>
+
+            <p class="paragraph">
+                ความน่าสนใจของ OB คือการนำความรู้มาประยุกต์และบูรณาการจากหลากหลายสาขาวิชา ทั้งจิตวิทยา (Psychology) เพื่อเข้าใจบุคลิกภาพและแรงจูงใจ สังคมวิทยา (Sociology) เพื่อเข้าใจอิทธิพลและการปฏิสัมพันธ์ของกลุ่ม มนุษยวิทยา (Anthropology) เพื่อเข้าใจความแตกต่างด้านค่านิยมและวัฒนธรรม ตลอดจนรัฐศาสตร์ (Political Science) ที่ช่วยอธิบายเกี่ยวกับเรื่องอำนาจและการเมืองในองค์กร
+            </p>
+
+            <div class="highlight-card">
+                <h3>💡 ทำไมเราจึงต้องเรียนรู้วิชา OB?</h3>
+                <p>เพราะ OB ช่วยให้เราสามารถอธิบายและเข้าใจพฤติกรรม คาดการณ์สิ่งที่จะเกิดขึ้น และสามารถปรับหรือควบคุมการทำงานให้ออกมาราบรื่น ยิ่งในยุคปัจจุบันที่เราต้องทำงานร่วมกับคนต่างรุ่น ต่างวัฒนธรรม และปรับตัวตามเทคโนโลยี วิชา OB จึงเป็นเครื่องมือสำคัญที่ช่วยให้ทุกคนทำงานร่วมกันอย่างมีความสุขและขับเคลื่อนองค์กรสู่ความสำเร็จ</p>
+            </div>
+
+            <p class="paragraph">
+                สรุปได้ว่า วิชาพฤติกรรมองค์การไม่ใช่เรื่องไกลตัวหรือยากเกินความเข้าใจ แต่เป็นศาสตร์ที่ทำให้เราเข้าใจมนุษย์ในมิติต่างๆ ได้ดียิ่งขึ้น และเมื่อบุคลากรทำงานอย่างมีความสุข มีความเข้าใจซึ่งกันและกัน สภาพแวดล้อมในการทำงานย่อมดีขึ้น และส่งผลให้องค์กรประสบความสำเร็จอย่างยั่งยืนในที่สุด
+            </p>
+        </div>
+
+        <div class="footer">
+            <p>ที่มา: พอดแคสต์ "พฤติกรรมองค์การ บทที่ 1 ภาพรวมวิชาพฤติกรรมองค์การ" โดยรายการ Science in Story</p>
+            <p><a href="http://www.youtube.com/watch?v=xsD0Ap6-KnQ" target="_blank">รับชมวิดีโอต้นฉบับบน YouTube</a></p>
+        </div>
+    </div>
+
+</body>
+</html>
