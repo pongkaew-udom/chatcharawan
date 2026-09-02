@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivation Challenge - Classroom Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Prompt:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-gold: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Presentation Container */
+        .presentation-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            min-height: 600px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.4s ease-in-out;
+            position: relative;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide Header & Titles */
+        .slide-header {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            font-family: 'Prompt', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-round { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+        .badge-answer { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+        .badge-event { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
+        .badge-info { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+
+        h1, h2, h3 {
+            font-family: 'Prompt', sans-serif;
+            font-weight: 700;
+        }
+
+        h1 { font-size: 2.8rem; background: linear-gradient(to right, #fbbf24, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 2rem; color: #f8fafc; }
+        h3 { font-size: 1.4rem; color: #cbd5e1; margin-bottom: 10px; }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Content Styling */
+        .content-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .scenario-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid var(--accent-gold);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 25px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .scenario-box strong {
+            color: var(--accent-gold);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .option-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .option-card .letter {
+            font-family: 'Prompt', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            margin-right: 15px;
+        }
+
+        .option-card .text {
+            flex-grow: 1;
+            font-size: 1.05rem;
+        }
+
+        .option-card .cost {
+            font-size: 0.95rem;
+            color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        /* Instructions Footer Box */
+        .instruction-box {
+            margin-top: 25px;
+            padding: 12px 20px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px dashed var(--accent-gold);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #fcd34d;
+            text-align: center;
+        }
+
+        /* Answer Display */
+        .best-choice-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.3));
+            border: 2px solid var(--accent-green);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .best-choice-card .choice {
+            font-size: 2.2rem;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 800;
+            color: #6ee7b7;
+        }
+
+        .best-choice-card .points {
+            font-size: 1.3rem;
+            color: #a7f3d0;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .theory-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .theory-box h4 {
+            color: var(--accent-gold);
+            font-family: 'Prompt', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        /* Event Card Styling */
+        .event-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.3));
+            border: 2px solid var(--accent-red);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .event-card-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(4, 120, 87, 0.3));
+            border: 2px solid var(--accent-green);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .event-title {
+            font-size: 2rem;
+            font-family: 'Prompt', sans-serif;
+            color: #fca5a5;
+            margin-bottom: 15px;
+        }
+
+        .event-effect {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-gold);
+            font-family: 'Prompt', sans-serif;
+        }
+
+        /* Navigation Controls */
+        .controls {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px 25px 20px;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-number {
+            font-family: 'Prompt', sans-serif;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide { padding: 25px; min-height: 500px; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .options-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+
+        <!-- SLIDE 1: Title -->
+        <div class="slide active">
+            <div class="slide-header">
+                <span class="badge badge-info">CLASSROOM GAME</span>
+                <span class="slide-number">Slide 1 / 23</span>
+            </div>
+            <div class="content-body" style="text-align: center; justify-content: center; align-items: center;">
+                <h1 style="font-size: 3.5rem; margin-bottom: 10px;">MOTIVATION CHALLENGE</h1>
+                <p class="subtitle" style="font-size: 1.5rem; color: #cbd5e1; margin-bottom: 30px;">Classroom Game • Coins + Event Cards</p>
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 25px 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); max-width: 600px;">
+                    <p style="font-size: 1.3rem; color: #f59e0b; font-weight: 700; margin-bottom: 10px;">เริ่มต้นทีมละ 100 MOTIVATION COINS</p>
+                    <p style="font-size: 1.1rem; color: #cbd5e1;">เป้าหมาย: สร้างแรงจูงใจให้ตรงจุด โดยใช้งบอย่างมีเหตุผล</p>
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 2: How to Play -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>HOW TO PLAY</h2>
+                <span class="badge badge-info">RULES</span>
+            </div>
+            <div class="content-body">
+                <h3 style="color: #f59e0b; margin-bottom: 20px;">กติกาและระบบคะแนน</h3>
+                <ol style="list-style-position: inside; font-size: 1.15rem; line-height: 2; color: #e2e8f0;">
+                    <li><strong style="color: #60a5fa;">1.</strong> แต่ละทีมเริ่มด้วย 100 Motivation Coins</li>
+                    <li><strong style="color: #60a5fa;">2.</strong> แต่ละรอบเลือก A–E เพียง 1 คำตอบ แล้วหัก Coin ตาม Cost</li>
+                    <li><strong style="color: #60a5fa;">3.</strong> ยกป้าย A–E พร้อมกัน ก่อนเปิดหน้าถัดไป</li>
+                    <li><strong style="color: #60a5fa;">4.</strong> คำตอบที่เหมาะที่สุด = +10 Motivation Points</li>
+                    <li><strong style="color: #60a5fa;">5.</strong> คำตอบอื่นไม่เสีย Point แต่ยังต้องจ่าย Coin ตามที่เลือก</li>
+                    <li><strong style="color: #60a5fa;">6.</strong> Event Card อาจเพิ่ม/ลด Coin หรือเปลี่ยนสถานการณ์</li>
+                </ol>
+                <div style="margin-top: 25px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; padding: 15px; border-radius: 12px; text-align: center; font-size: 1.1rem;">
+                    <strong>ผู้ชนะ</strong> = Motivation Points สูงสุด • ถ้าเสมอ ให้ทีมที่เหลือ Coins มากกว่าเป็นผู้ชนะ
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 3: Team Record -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>TEAM RECORD</h2>
+                <span class="badge badge-info">SCOREBOARD</span>
+            </div>
+            <div class="content-body">
+                <h3>ตารางบันทึกของแต่ละทีม</h3>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">ให้แต่ละทีมจดลงกระดาษของตนเองทุกครั้งหลังเลือกคำตอบ</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>รอบ</th>
+                            <th>คำตอบ A–E</th>
+                            <th>Coin ที่ใช้หักตามตัวเลือก</th>
+                            <th>Coin คงเหลือ (เริ่ม 100)</th>
+                            <th>Motivation Points (+10 ถ้าตรงที่สุด)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: bold; color: #f59e0b;">1–8</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="instruction-box" style="margin-top: 30px;">
+                    <strong>หมายเหตุ:</strong> จุดประสงค์ไม่ใช่ “ใช้ Coin ให้น้อยที่สุด” แต่คือเลือกวิธีที่ตรงกับแรงจูงใจของพนักงานโดยไม่ใช้งบเกินจำเป็น
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 4: Round 1 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 1 • COINS</h2>
+                <span class="badge badge-round">ROUND 1</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: มินเริ่มเบื่องาน</strong><br>
+                    มินทำงานฝ่ายการตลาดมา 3 ปี เงินเดือนและสวัสดิการดี แต่เบื่องานเดิมซ้ำ ๆ และอยากรับผิดชอบงานที่สำคัญขึ้น<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">เพิ่มเงินเดือน 5%</span><span class="cost">30 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">ให้โบนัสพิเศษ</span><span class="cost">25 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">มอบหมายโปรเจกต์ใหม่ที่ท้าทาย</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">เพิ่มวันหยุด</span><span class="cost">15 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">จัดอาหารกลางวันฟรี</span><span class="cost">10 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 5: Answer Round 1 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 1</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">C: มอบหมายโปรเจกต์ใหม่ที่ท้าทาย</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: Herzberg + McClelland</h4>
+                    <p>Achievement, Responsibility และ Growth เป็น Motivators และสะท้อน Need for Achievement</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 6: Round 2 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 2 • COINS</h2>
+                <span class="badge badge-round">ROUND 2</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: ต้นกลัวไม่ผ่านทดลองงาน</strong><br>
+                    ต้นเพิ่งเข้าทำงาน 2 เดือน ได้ยินข่าวว่าบริษัทอาจลดพนักงาน จึงกังวลและไม่มีสมาธิในการทำงาน<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">จัดงานเลี้ยงทีม</span><span class="cost">15 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">ชมเชยต่อหน้าทุกคน</span><span class="cost">5 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">มอบหมายงานยากขึ้น</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">ชี้แจงสถานะงานและเกณฑ์ผ่านทดลองงาน</span><span class="cost">5 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">ให้รางวัลพนักงานใหม่ดีเด่น</span><span class="cost">10 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 7: Answer Round 2 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 2</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">D: ชี้แจงสถานะงานและเกณฑ์ผ่านทดลองงาน</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: Maslow — Safety Needs</h4>
+                    <p>สิ่งที่ต้นต้องการเร่งด่วนคือความมั่นคงและความชัดเจนเกี่ยวกับงาน</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 8: Round 3 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 3 • COINS</h2>
+                <span class="badge badge-round">ROUND 3</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: แพรรู้สึกโดดเดี่ยว</strong><br>
+                    แพรได้เงินเดือนดี แต่มักถูกทิ้งให้อยู่คนเดียวและรู้สึกว่าไม่ได้เป็นส่วนหนึ่งของทีม จนเริ่มคิดอยากลาออก<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">เพิ่มเงินเดือน</span><span class="cost">30 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">ให้ WFH คนเดียว</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">จัด Buddy/งานกลุ่มให้เชื่อมกับทีม</span><span class="cost">5 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">ให้โบนัส</span><span class="cost">25 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">เพิ่ม KPI</span><span class="cost">5 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 9: Answer Round 3 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 3</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">C: จัด Buddy/งานกลุ่มให้เชื่อมกับทีม</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: Maslow + McClelland</h4>
+                    <p>Belongingness และ Need for Affiliation ชี้ว่าความสัมพันธ์และการเป็นส่วนหนึ่งของกลุ่มสร้างแรงจูงใจได้</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 10: Event Card 1 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>EVENT CARD 1</h2>
+                <span class="badge badge-event">SPECIAL EVENT</span>
+            </div>
+            <div class="content-body">
+                <div class="event-card">
+                    <div class="event-title">⚡ BUDGET CUT!</div>
+                    <p style="font-size: 1.3rem; color: #e2e8f0;">ยอดขายบริษัทลดลงกะทันหัน ฝ่ายบริหารประกาศลดงบทุกทีม</p>
+                    <div class="event-effect">คืนงบ 15 COINS</div>
+                </div>
+                <div class="instruction-box" style="margin-top: 20px;">
+                    ทุกทีมบันทึกผลของ Event Card ก่อนเล่นรอบต่อไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 11: Event Card 1 Reflection -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>EVENT CARD 1</h2>
+                <span class="badge badge-info">REFLECTION</span>
+            </div>
+            <div class="content-body" style="text-align: center;">
+                <h3 style="font-size: 2rem; color: var(--accent-gold); margin-bottom: 25px;">เหตุการณ์นี้สอนอะไร?</h3>
+                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); max-width: 700px; margin: 0 auto 30px auto;">
+                    <p style="font-size: 1.4rem; line-height: 1.6; color: #f8fafc;">
+                        "เหตุการณ์นี้ทำให้ผู้จัดการต้องคิดว่า<br>
+                        <strong style="color: #60a5fa;">วิธีสร้างแรงจูงใจที่ดีไม่จำเป็นต้องแพงเสมอไป</strong>"
+                    </p>
+                </div>
+                <p style="font-size: 1.1rem; color: var(--text-muted);">
+                    ตรวจ Coin คงเหลือของทีม แล้วเข้าสู่รอบถัดไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 12: Round 4 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 4 • COINS</h2>
+                <span class="badge badge-round">ROUND 4</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: ก้องอยากมีบทบาท</strong><br>
+                    ก้องไม่สนใจโบนัสมากนัก แต่ชอบเสนอความคิดเห็น ประสานงาน และอยากมีส่วนในการตัดสินใจของทีม<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">เพิ่มเงินเดือน</span><span class="cost">30 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">ให้เป็นหัวหน้าโครงการย่อย</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">ให้ทำงานคนเดียว</span><span class="cost">5 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">เพิ่มวันหยุด</span><span class="cost">15 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">ลดความรับผิดชอบ</span><span class="cost">0 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 13: Answer Round 4 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 4</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">B: ให้เป็นหัวหน้าโครงการย่อย</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: McClelland — Need for Power</h4>
+                    <p>ก้องมีความต้องการมีอิทธิพลและมีส่วนกำหนดทิศทางของงาน</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 14: Round 5 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 5 • COINS</h2>
+                <span class="badge badge-round">ROUND 5</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: นัทเริ่มทำงานน้อยลง</strong><br>
+                    นัททำยอดขายสูงกว่าค่าเฉลี่ย 30% แต่เพื่อนที่ผลงานต่ำกว่าได้โบนัสมากกว่าเพราะสนิทกับหัวหน้า นัทจึงเริ่มลดความพยายาม<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">บอกให้คิดบวก</span><span class="cost">0 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">เพิ่มงานให้นัท</span><span class="cost">0 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">จัด Team Building</span><span class="cost">15 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">ตรวจสอบและทำระบบผลตอบแทนให้เป็นธรรม</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">ชมเชยแทนโบนัส</span><span class="cost">5 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 15: Answer Round 5 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 5</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">D: ตรวจสอบและทำระบบผลตอบแทนให้เป็นธรรม</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: Equity Theory</h4>
+                    <p>เมื่อพนักงานรับรู้ว่า Input–Outcome ของตนไม่ยุติธรรมเมื่อเทียบกับผู้อื่น เขาอาจลดความพยายาม</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 16: Event Card 2 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>EVENT CARD 2</h2>
+                <span class="badge badge-event">SPECIAL EVENT</span>
+            </div>
+            <div class="content-body">
+                <div class="event-card">
+                    <div class="event-title">⚡ SALARY LEAK!</div>
+                    <p style="font-size: 1.3rem; color: #e2e8f0;">ข้อมูลเงินเดือนรั่ว พนักงานพบว่าคนที่ผลงานใกล้เคียงกันได้เงินเดือนต่างกัน 20%</p>
+                    <div class="event-effect" style="font-size: 1.3rem;">อภิปราย 2 นาที • ยังไม่หัก Coin</div>
+                </div>
+                <div class="instruction-box" style="margin-top: 20px;">
+                    ทุกทีมบันทึกผลของ Event Card ก่อนเล่นรอบต่อไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 17: Event Card 2 Reflection -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>EVENT CARD 2</h2>
+                <span class="badge badge-info">REFLECTION</span>
+            </div>
+            <div class="content-body">
+                <h3 style="font-size: 1.8rem; color: var(--accent-gold); margin-bottom: 15px;">เหตุการณ์นี้สอนอะไร?</h3>
+                
+                <div class="theory-box" style="margin-bottom: 20px;">
+                    <p style="font-size: 1.2rem;"><strong>เชื่อมกับ Equity Theory:</strong> สิ่งสำคัญคือการรับรู้ความยุติธรรม ไม่ใช่จำนวนเงินเพียงอย่างเดียว</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <p style="font-size: 1.1rem; color: #f59e0b; font-weight: 700; margin-bottom: 10px;">ถามแต่ละทีม: พนักงานอาจตอบสนองต่อความไม่ยุติธรรมอย่างไร?</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                        <span style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; padding: 6px 14px; border-radius: 20px;">ลดความพยายาม</span>
+                        <span style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; padding: 6px 14px; border-radius: 20px;">เรียกร้องผลตอบแทน</span>
+                        <span style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; padding: 6px 14px; border-radius: 20px;">เปลี่ยนการเปรียบเทียบ</span>
+                        <span style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; padding: 6px 14px; border-radius: 20px;">ลาออก</span>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 18: Round 6 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 6 • COINS</h2>
+                <span class="badge badge-round">ROUND 6</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: โบนัสสูง แต่เป้าหมายเป็นไปไม่ได้</strong><br>
+                    บริษัทบอกว่าถ้าเพิ่มยอดขาย 40% จะได้โบนัสก้อนใหญ่ แต่พนักงานเชื่อว่าต่อให้พยายามเต็มที่ก็ทำไม่ได้<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">เพิ่มโบนัสอีก</span><span class="cost">30 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">ขู่ลงโทษ</span><span class="cost">0 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">ปรับเป้าหมาย/ทรัพยากรให้ความพยายามนำสู่ผลงาน</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">จัดงานเลี้ยง</span><span class="cost">15 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">เพิ่มเวลาทำงาน</span><span class="cost">5 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 19: Answer Round 6 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 6</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">C: ปรับเป้าหมาย/ทรัพยากรให้ความพยายามนำสู่ผลงาน</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: Expectancy — Expectancy</h4>
+                    <p>พนักงานไม่เชื่อว่า Effort จะนำไปสู่ Performance จึงมี Expectancy ต่ำ</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 20: Round 7 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 7 • COINS</h2>
+                <span class="badge badge-round">ROUND 7</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: ทำได้ แต่บริษัทคงไม่จ่าย</strong><br>
+                    ทีมเชื่อว่าทำยอดถึงเป้าได้ แต่ปีที่แล้วบริษัทสัญญาโบนัสแล้วไม่จ่าย จึงไม่เชื่อว่าผลงานจะนำไปสู่รางวัล<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">ลดเป้าหมาย</span><span class="cost">5 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">ทำระบบรางวัลชัดเจนและรักษาคำสัญญา</span><span class="cost">5 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">เพิ่มการอบรม</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">เพิ่มสมาชิกทีม</span><span class="cost">20 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">ชมเชยทุกคน</span><span class="cost">5 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 21: Answer Round 7 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 7</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">B: ทำระบบรางวัลชัดเจนและรักษาคำสัญญา</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: Expectancy — Instrumentality</h4>
+                    <p>พนักงานเชื่อว่าทำผลงานได้ แต่ไม่เชื่อว่า Performance จะนำไปสู่ Reward</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 22: Event Card 3 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>EVENT CARD 3</h2>
+                <span class="badge badge-event">SPECIAL EVENT</span>
+            </div>
+            <div class="content-body">
+                <div class="event-card-green">
+                    <div class="event-title" style="color: #6ee7b7;">⚡ GREAT PERFORMANCE!</div>
+                    <p style="font-size: 1.3rem; color: #e2e8f0;">ทีมของคุณรักษาแรงจูงใจของพนักงานได้ดี ผู้บริหารเพิ่มงบให้</p>
+                    <div class="event-effect" style="color: #6ee7b7; border-color: #10b981;">รับเพิ่ม +15 COINS</div>
+                </div>
+                <div class="instruction-box" style="margin-top: 20px;">
+                    ทุกทีมบันทึกผลของ Event Card ก่อนเล่นรอบต่อไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 23: Event Card 3 Reflection -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>EVENT CARD 3</h2>
+                <span class="badge badge-info">REFLECTION</span>
+            </div>
+            <div class="content-body" style="text-align: center;">
+                <h3 style="font-size: 2rem; color: var(--accent-gold); margin-bottom: 25px;">เหตุการณ์นี้สอนอะไร?</h3>
+                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); max-width: 700px; margin: 0 auto 30px auto;">
+                    <p style="font-size: 1.4rem; line-height: 1.6; color: #f8fafc;">
+                        "รางวัลจากผลการบริหารที่ดี<br>
+                        ช่วยให้ทีมมีทรัพยากรเพิ่มสำหรับรอบสุดท้าย"
+                    </p>
+                </div>
+                <p style="font-size: 1.1rem; color: var(--text-muted);">
+                    ตรวจ Coin คงเหลือของทีม แล้วเข้าสู่รอบถัดไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 24: Round 8 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ROUND 8 • COINS</h2>
+                <span class="badge badge-round">ROUND 8</span>
+            </div>
+            <div class="content-body">
+                <div class="scenario-box">
+                    <strong>สถานการณ์: รางวัลที่พนักงานไม่ต้องการ</strong><br>
+                    บริษัทให้บัตรฟิตเนส 1 ปีแก่พนักงานดีเด่น แต่พนักงานคนหนึ่งไม่ชอบออกกำลังกายและอยากได้วันหยุดมากกว่า<br><br>
+                    <em>ถ้าคุณเป็นผู้จัดการ คุณจะเลือกอะไร?</em>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card"><span class="letter">A</span><span class="text">เพิ่มมูลค่าบัตรฟิตเนส</span><span class="cost">20 coins</span></div>
+                    <div class="option-card"><span class="letter">B</span><span class="text">ให้รางวัลเหมือนกันทุกคน</span><span class="cost">10 coins</span></div>
+                    <div class="option-card"><span class="letter">C</span><span class="text">ให้เลือกรางวัลที่ตนให้คุณค่า</span><span class="cost">5 coins</span></div>
+                    <div class="option-card"><span class="letter">D</span><span class="text">เพิ่ม KPI</span><span class="cost">0 coins</span></div>
+                    <div class="option-card"><span class="letter">E</span><span class="text">ไม่ให้รางวัล</span><span class="cost">0 coins</span></div>
+                </div>
+
+                <div class="instruction-box">
+                    อภิปราย → เลือก → หัก Coin → ยกป้ายพร้อมกัน จากนั้นเปิดหน้าถัดไป
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 25: Answer Round 8 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>ANSWER • ROUND 8</h2>
+                <span class="badge badge-answer">SOLUTION</span>
+            </div>
+            <div class="content-body">
+                <div class="best-choice-card">
+                    <div style="font-size: 1rem; color: #a7f3d0; text-transform: uppercase;">BEST CHOICE</div>
+                    <div class="choice">C: ให้เลือกรางวัลที่ตนให้คุณค่า</div>
+                    <div class="points">+10 MOTIVATION POINTS</div>
+                </div>
+
+                <div class="theory-box">
+                    <h4>ทฤษฎีที่เกี่ยวข้อง: Expectancy — Valence</h4>
+                    <p>รางวัลจะจูงใจได้เมื่อผู้รับให้คุณค่ากับรางวัลนั้น</p>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 0.95rem;">
+                    • ทีมที่ไม่ได้เลือกคำตอบนี้ไม่ต้องหักคะแนนเพิ่ม แต่ยังคงหัก Coin ตามตัวเลือกที่ทีมตัดสินใจไปแล้ว<br>
+                    • ให้แต่ละทีมบันทึก Coin คงเหลือและ Motivation Points ก่อนเข้าสู่รอบต่อไป
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 26: Final Score -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>FINAL SCORE</h2>
+                <span class="badge badge-info">SUMMARY</span>
+            </div>
+            <div class="content-body" style="text-align: center;">
+                <h3 style="font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 25px;">ทีมไหนคือ Motivation Manager?</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: 0 auto 25px auto;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size: 1.2rem; color: #34d399; font-weight: bold; margin-bottom: 5px;">MOTIVATION POINTS</div>
+                        <p style="color: var(--text-muted);">รวมคะแนนจาก Best Choice<br>แต่ละข้อ = +10</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size: 1.2rem; color: #f59e0b; font-weight: bold; margin-bottom: 5px;">COINS REMAINING</div>
+                        <p style="color: var(--text-muted);">ใช้เป็นตัวตัดสินเมื่อ<br>Motivation Points เท่ากัน</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 1.2rem;">
+                    <strong>ผู้ชนะ:</strong> Points สูงสุด → ถ้าเสมอ ดู Coins ที่เหลือ
+                </div>
+
+                <p style="font-size: 1.15rem; color: #cbd5e1; italic;">
+                    <strong>คำถามปิดเกม:</strong> ทีมที่ใช้เงินมากที่สุดสร้างแรงจูงใจได้ดีที่สุดหรือไม่? เพราะอะไร?
+                </p>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 27: Wrap-up -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>WRAP-UP</h2>
+                <span class="badge badge-info">SUMMARY</span>
+            </div>
+            <div class="content-body">
+                <h3 style="color: var(--accent-gold); margin-bottom: 20px;">5 แนวคิดที่พบในเกม</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: bold; color: #60a5fa; width: 140px;">1. Maslow</span>
+                        <span style="flex-grow: 1;">Needs เปลี่ยนไปตามสิ่งที่บุคคลกำลังขาด</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: bold; color: #60a5fa; width: 140px;">2. Herzberg</span>
+                        <span style="flex-grow: 1;">Hygiene ลดความไม่พอใจ / Motivators สร้างแรงจูงใจ</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: bold; color: #60a5fa; width: 140px;">3. McClelland</span>
+                        <span style="flex-grow: 1;">Achievement • Affiliation • Power</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: bold; color: #60a5fa; width: 140px;">4. Expectancy</span>
+                        <span style="flex-grow: 1;">Expectancy • Instrumentality • Valence</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: bold; color: #60a5fa; width: 140px;">5. Equity</span>
+                        <span style="flex-grow: 1;">การรับรู้ความยุติธรรมส่งผลต่อความพยายาม</span>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <!-- SLIDE 28: Exit Ticket -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>EXIT TICKET</h2>
+                <span class="badge badge-info">ASSIGNMENT</span>
+            </div>
+            <div class="content-body" style="text-align: center; justify-content: center; align-items: center;">
+                <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(245, 158, 11, 0.2)); border: 2px dashed var(--accent-purple); padding: 40px; border-radius: 20px; max-width: 700px;">
+                    <h3 style="font-size: 2rem; color: #fff; margin-bottom: 15px;">คำถาม Exit Ticket</h3>
+                    <p style="font-size: 1.5rem; color: #fcd34d; line-height: 1.5;">
+                        “เงินเป็นแรงจูงใจที่ดีที่สุดหรือไม่?<br>ใช้ทฤษฎีอย่างน้อย 1 ทฤษฎีอธิบาย”
+                    </p>
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="controls">
+        <button class="btn" id="prevBtn" onclick="changeSlide(-1)">❮ ถอยหลัง</button>
+        <span class="slide-number" id="slideIndicator">Slide 1 / 28</span>
+        <button class="btn" id="nextBtn" onclick="changeSlide(1)">ถัดไป ❯</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const slideIndicator = document.getElementById('slideIndicator');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                }
+            });
+
+            slideIndicator.textContent = `Slide ${currentSlide + 1} / ${slides.length}`;
+            
+            // Update button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+            updateSlide();
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                if (currentSlide < slides.length - 1) changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 0) changeSlide(-1);
+            }
+        });
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>

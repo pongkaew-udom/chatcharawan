@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTIVATION CHALLENGE - TEAM DECISION RECORD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #ffffff;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a365d;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2b6cb0;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .info-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background-color: #f7fafc;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .info-value {
+            border-bottom: 1px dashed #a0aec0;
+            flex-grow: 1;
+            padding-bottom: 2px;
+            min-height: 20px;
+        }
+
+        .instructions {
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #2c5282;
+            border-radius: 0 6px 6px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 10px 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2b6cb0;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .table-rounds td {
+            height: 28px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .event-card {
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            border-left: 4px solid #dd6b20;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .event-header {
+            font-weight: 700;
+            color: #c05621;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .fill-line {
+            display: inline-block;
+            border-bottom: 1px dashed #718096;
+            min-width: 150px;
+            margin: 0 5px;
+        }
+
+        .fill-line-full {
+            display: block;
+            border-bottom: 1px dashed #718096;
+            width: 100%;
+            margin-top: 15px;
+            min-height: 20px;
+        }
+
+        .final-result {
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            border-left: 4px solid #38a169;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .final-header {
+            font-weight: 700;
+            color: #276749;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .page-break-header {
+            margin-top: 40px;
+            border-top: 2px dashed #cbd5e0;
+            padding-top: 20px;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>MOTIVATION CHALLENGE</h1>
+    <h2>TEAM DECISION RECORD • ใบบันทึกผลการตัดสินใจของทีม</h2>
+
+    <div class="info-section">
+        <div class="info-item" style="grid-column: span 2;">
+            <span class="info-label">ชื่อทีม:</span>
+            <div class="info-value"></div>
+        </div>
+        <div class="info-item" style="grid-column: span 2;">
+            <span class="info-label">สมาชิก:</span>
+            <div class="info-value"></div>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Motivation Coins เริ่มต้น:</span>
+            <span>100 Coins</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Motivation Points เริ่มต้น:</span>
+            <span>0 Points</span>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <strong>วิธีบันทึก:</strong> ในแต่ละรอบ ให้ทีมเลือก A–E แล้วบันทึก Cost ที่ใช้ จากนั้นคำนวณ Coin คงเหลือ หากคำตอบตรงกับ Best Choice ให้บวก +10 Motivation Points และเมื่อพบ Event Card ให้บันทึกผลกระทบก่อนเล่นรอบถัดไป
+    </div>
+
+    <table class="table-rounds">
+        <thead>
+            <tr>
+                <th style="width: 8%;">รอบ</th>
+                <th style="width: 14%;">คำตอบ A–E</th>
+                <th style="width: 26%;">เหตุผลสั้น ๆ</th>
+                <th style="width: 13%;">Coin ก่อนรอบ</th>
+                <th style="width: 13%;">Cost ที่ใช้</th>
+                <th style="width: 13%;">Coin หลังรอบ</th>
+                <th style="width: 13%;">Points ที่ได้</th>
+                <th style="width: 13%;">Points สะสม</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="center">1</td>
+                <td></td>
+                <td></td>
+                <td class="center">100</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="center">2</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="center">3</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="center">4</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="center">5</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="event-card">
+        <div class="event-header">⚡ EVENT CARD 1 — BUDGET CUT!</div>
+        <table>
+            <tr>
+                <td style="width: 20%; font-weight: 600; background-color: #fffaf0;">สถานการณ์</td>
+                <td colspan="3">ยอดขายบริษัทลดลงกะทันหัน ฝ่ายบริหารลดงบทุกทีม</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #fffaf0;">ผลของ Event</td>
+                <td>คืนงบ 15 Coins</td>
+                <td><strong>Coin ก่อน Event:</strong> <span class="fill-line"></span></td>
+                <td><strong>Coin หลัง Event:</strong> <span class="fill-line"></span></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #fffaf0;">ทีมจะปรับกลยุทธ์อย่างไร?</td>
+                <td colspan="3"><span class="fill-line-full"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="page-break-header">
+        <h2>TEAM DECISION RECORD • ต่อ</h2>
+    </div>
+
+    <div class="event-card">
+        <div class="event-header">⚡ EVENT CARD 2 — SALARY LEAK!</div>
+        <table>
+            <tr>
+                <td style="width: 25%; font-weight: 600; background-color: #fffaf0;">สถานการณ์</td>
+                <td colspan="3">ข้อมูลเงินเดือนรั่ว พนักงานพบว่าคนที่ผลงานใกล้เคียงกันได้เงินเดือนต่างกัน 20%</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #fffaf0;">ผลต่อ Coin</td>
+                <td>ไม่มีการเพิ่ม/ลด Coin</td>
+                <td colspan="2"><strong>Coin ปัจจุบัน:</strong> <span class="fill-line"></span></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #fffaf0;">พนักงานน่าจะรู้สึก/ทำอย่างไร?</td>
+                <td colspan="3"><span class="fill-line-full"></span></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #fffaf0;">ทฤษฎีที่เกี่ยวข้อง</td>
+                <td><span class="fill-line" style="min-width: 100%;"></span></td>
+                <td style="font-weight: 600; background-color: #fffaf0; width: 12%;">เหตุผล</td>
+                <td><span class="fill-line" style="min-width: 100%;"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="table-rounds">
+        <thead>
+            <tr>
+                <th style="width: 8%;">รอบ</th>
+                <th style="width: 14%;">คำตอบ A–E</th>
+                <th style="width: 26%;">เหตุผลสั้น ๆ</th>
+                <th style="width: 13%;">Coin ก่อนรอบ</th>
+                <th style="width: 13%;">Cost ที่ใช้</th>
+                <th style="width: 13%;">Coin หลังรอบ</th>
+                <th style="width: 13%;">Points ที่ได้</th>
+                <th style="width: 13%;">Points สะสม</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="center">6</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="center">7</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="center">8</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="event-card">
+        <div class="event-header">⚡ EVENT CARD 3 — GREAT PERFORMANCE!</div>
+        <table>
+            <tr>
+                <td style="width: 20%; font-weight: 600; background-color: #fffaf0;">สถานการณ์</td>
+                <td colspan="3">ทีมของคุณรักษาแรงจูงใจของพนักงานได้ดี ผู้บริหารเพิ่มงบให้</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #fffaf0;">ผลของ Event</td>
+                <td>+15 Coins</td>
+                <td><strong>Coin ก่อน Event:</strong> <span class="fill-line"></span></td>
+                <td><strong>Coin หลัง Event:</strong> <span class="fill-line"></span></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #fffaf0;">พร้อมสำหรับ Final Round</td>
+                <td colspan="3">✓</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="final-result">
+        <div class="final-header">🏆 FINAL RESULT</div>
+        <table>
+            <tr>
+                <td style="width: 25%; font-weight: 600; background-color: #f0fff4;">Motivation Points รวม</td>
+                <td style="width: 25%;"><span class="fill-line" style="min-width: 100%;"></span></td>
+                <td style="width: 25%; font-weight: 600; background-color: #f0fff4;">Coins คงเหลือ</td>
+                <td style="width: 25%;"><span class="fill-line" style="min-width: 100%;"></span></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #f0fff4;">สิ่งที่ทีมทำได้ดีที่สุด</td>
+                <td colspan="3"><span class="fill-line-full"></span></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600; background-color: #f0fff4;">ถ้าเล่นใหม่ ทีมจะเปลี่ยนอะไร?</td>
+                <td colspan="3"><span class="fill-line-full"></span></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
