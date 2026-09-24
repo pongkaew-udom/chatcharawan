@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานวิจัยเชิงโต้ตอบ: การจัดการทรัพยากรมนุษย์ยุคดิจิทัล & AI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Warm Neutral Harmonized - Soft Slate, Warm Canvas (#faf8f5), Indigo Accent, Amber/Teal Data Highlights -->
+    <!-- Application Structure Plan: Single Page Dashboard with Sticky Header Nav, Executive Key Metrics Bar, Thematic Tabbed Sections (1. วิวัฒนาการแบบเปรียบเทียบ, 2. AI Matrix ในงาน HR, 3. ศูนย์วิเคราะห์อุปสงค์แรงงานและสถิติโลก, 4. โมเดลการทำงานและทักษะอนาคต, 5. แผนนโยบายและบทสรุป) plus a Global Interactive Search & Filter bar to allow users to quickly find specific insights across all domains. -->
+    <!-- Visualization & Content Choices: 
+       - Traditional vs Digital HRM: Interactive comparison filter matrix & 3-stage progress card flow (HTML/CSS/JS).
+       - AI in 5 HR Domains: Dynamic domain explorer cards with Chart.js Horizontal Bar Chart comparing efficiency gains.
+       - Labor Impact: Chart.js Bar Chart (WEF Job Displacement vs Creation) and Interactive Multi-Source Insight Cards (McKinsey, GS, ILO, WEF).
+       - Human-AI Synergy: Styled CSS step-by-step interactive workflow diagram.
+       - Skill Matrix: Grid layout with dynamic skill depth sliders and interactive role cards.
+       - Confirming NO SVG / NO Mermaid JS. Canvas used for Chart.js. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #faf8f5;
+            color: #1e293b;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-600 text-white font-bold text-lg shadow-md shadow-indigo-200">
+                        HR
+                    </span>
+                    <div>
+                        <h1 class="font-bold text-slate-900 text-base sm:text-lg leading-tight">Digital HRM & AI Research Dashboard</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">การกลายพันธุ์ของการจัดการทรัพยากรมนุษย์และอุปสงค์แรงงาน</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium">
+                    <a href="#overview" class="px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">ภาพรวม</a>
+                    <a href="#evolution" class="px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">วิวัฒนาการ</a>
+                    <a href="#ai-domains" class="px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">AI ใน HR</a>
+                    <a href="#labor-demand" class="px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">ผลกระทบแรงงาน</a>
+                    <a href="#skills-strategy" class="px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">โมเดล & ทักษะ</a>
+                    <a href="#policy" class="px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">ข้อเสนอแนะ</a>
+                </nav>
+
+                <!-- Search Input in Header -->
+                <div class="relative w-36 sm:w-48 lg:w-64">
+                    <input type="text" id="globalSearchInput" onkeyup="filterGlobalContent()" placeholder="ค้นหาประเด็นวิจัย..." 
+                           class="w-full text-xs sm:text-sm pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                    <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Nav Scrollable -->
+        <div class="md:hidden flex overflow-x-auto px-4 py-2 bg-slate-50 border-t border-stone-200 text-xs font-medium space-x-2 custom-scrollbar">
+            <a href="#overview" class="whitespace-nowrap px-2.5 py-1 rounded bg-white border border-slate-200 text-slate-700">ภาพรวม</a>
+            <a href="#evolution" class="whitespace-nowrap px-2.5 py-1 rounded bg-white border border-slate-200 text-slate-700">วิวัฒนาการ</a>
+            <a href="#ai-domains" class="whitespace-nowrap px-2.5 py-1 rounded bg-white border border-slate-200 text-slate-700">AI ใน HR</a>
+            <a href="#labor-demand" class="whitespace-nowrap px-2.5 py-1 rounded bg-white border border-slate-200 text-slate-700">ผลกระทบแรงงาน</a>
+            <a href="#skills-strategy" class="whitespace-nowrap px-2.5 py-1 rounded bg-white border border-slate-200 text-slate-700">โมเดล & ทักษะ</a>
+            <a href="#policy" class="whitespace-nowrap px-2.5 py-1 rounded bg-white border border-slate-200 text-slate-700">ข้อเสนอแนะ</a>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- HERO & EXECUTIVE SUMMARY SECTION -->
+        <section id="overview" class="space-y-6">
+            <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="max-w-3xl space-y-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        📌 รายงานวิเคราะห์สังเคราะห์เชิงลึก (Executive Research Synthesis)
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                        การกลายพันธุ์ของการจัดการทรัพยากรมนุษย์ยุคดิจิทัล
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        การเปลี่ยนผ่านสู่ยุคเศรษฐกิจดิจิทัลและ AI ได้ยกระดับ HR จากงานธุรการสนับสนุนไปสู่ <strong class="text-amber-300">"กลไกขับเคลื่อนเชิงกลยุทธ์"</strong> ที่ใช้ข้อมูลนำทาง ค้นพบข้อสรุปสำคัญเกี่ยวกับความแตกต่างกระบวนทัศน์ บทบาทของ AI ตลอดชีวิตพนักงาน และการวิเคราะห์โครงสร้างตลาดแรงงานโลกปี 2025-2030
+                    </p>
+                </div>
+
+                <!-- Executive Key Metrics Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-800">
+                    <div class="bg-white/5 backdrop-blur rounded-2xl p-4 border border-white/10 hover:border-indigo-400/50 transition">
+                        <div class="text-xs text-slate-400 font-medium">ผลกระทบตำแหน่งงานสุทธิโลก</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1">+78 ล้าน</div>
+                        <div class="text-[11px] text-slate-400 mt-1">(สร้างใหม่ 170M / ทดแทน 92M)</div>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur rounded-2xl p-4 border border-white/10 hover:border-indigo-400/50 transition">
+                        <div class="text-xs text-slate-400 font-medium">ลดภาระงานธุรการ HR</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-indigo-400 mt-1">> 70%</div>
+                        <div class="text-[11px] text-slate-400 mt-1">ด้วย RPA & Generative AI</div>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur rounded-2xl p-4 border border-white/10 hover:border-indigo-400/50 transition">
+                        <div class="text-xs text-slate-400 font-medium">ส่วนต่างค่าจ้างทักษะ AI</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 mt-1">+56%</div>
+                        <div class="text-[11px] text-slate-400 mt-1">เทียบกับตำแหน่งที่ไม่มีทักษะ AI</div>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur rounded-2xl p-4 border border-white/10 hover:border-indigo-400/50 transition">
+                        <div class="text-xs text-slate-400 font-medium">อัตราเร่งลดเวลาสรรหา</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mt-1">40-60%</div>
+                        <div class="text-[11px] text-slate-400 mt-1">ลดต้นทุนและอคติในการคัดกรอง</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: EVOLUTION & COMPARISON (Traditional vs Digital HRM) -->
+        <section id="evolution" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-semibold text-xs uppercase tracking-wider">
+                    <span>🔄 Section 1</span>
+                    <span>•</span>
+                    <span>Structural Transformation</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                    วิวัฒนาการและการเปลี่ยนผ่านเชิงโครงสร้าง: จาก Traditional HRM สู่ Digital HRM
+                </h3>
+                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                    ส่วนนี้นำเสนอการย้ายกระบวนทัศน์ (Paradigm Shift) ของงานบริหารทรัพยากรบุคคล ผ่าน 3 ระยะของการปรับใช้เทคโนโลยี พร้อมการเปรียบเทียบใน 6 มิติหลักอย่างละเอียด เพื่อให้เข้าใจเหตุผลที่องค์กรต้องเปลี่ยนจากระบบการควบคุมมาเป็นการสร้างคุณค่าเชิงกลยุทธ์
+                </p>
+            </div>
+
+            <!-- 3 Stages Timeline Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-amber-50/60 border border-amber-200/80 rounded-2xl p-5 relative">
+                    <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full">ระยะที่ 1</span>
+                    <h4 class="font-bold text-slate-900 text-base mt-3">Digitization (การแปลงเป็นดิจิทัล)</h4>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        เปลี่ยนเอกสารกระดาษและระเบียบปฏิบัติให้อยู่ในรูปแบบไฟล์ดิจิทัล มุ่งเน้นความสะดวกในการจัดเก็บข้อมูล ลดข้อผิดพลาดจากการบันทึกด้วยมือ และสร้างฐานข้อมูลเบื้องต้น
+                    </p>
+                </div>
+                <div class="bg-indigo-50/60 border border-indigo-200/80 rounded-2xl p-5 relative">
+                    <span class="text-xs font-bold px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-full">ระยะที่ 2</span>
+                    <h4 class="font-bold text-slate-900 text-base mt-3">Digitalization (การปรับกระบวนการ)</h4>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        การนำระบบสารสนเทศ HRIS และ e-HRM เข้ามาเชื่อมโยงกระบวนการทำงานแบบอัตโนมัติ เริ่มใช้บริการแบบ Self-Service สำหรับพนักงานและผู้บริหาร
+                    </p>
+                </div>
+                <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-2xl p-5 relative">
+                    <span class="text-xs font-bold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full">ระยะที่ 3</span>
+                    <h4 class="font-bold text-slate-900 text-base mt-3">Digital Transformation (การปฏิรูป)</h4>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        ปรับเปลี่ยนปรัชญาและแบบจำลองการดำเนินงาน ผสาน AI, Big Data Analytics และ Cloud เพื่อสร้างคุณค่าใหม่ ยกระดับประสบการณ์พนักงาน และขับเคลื่อนกลยุทธ์ธุรกิจ
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interactive Comparison Table with Dimension Filter -->
+            <div class="space-y-4 pt-4">
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                    <span class="text-xs font-bold text-slate-700">ตารางเปรียบเทียบเชิงมิติ (เลือกกรองมิติ):</span>
+                    <div class="flex flex-wrap gap-2 text-xs" id="tableFilterBtns">
+                        <button onclick="filterTable('all')" class="px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white shadow-sm transition">ทั้งหมด (All)</button>
+                        <button onclick="filterTable('philosophy')" class="px-3 py-1.5 rounded-lg font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 transition">ปรัชญา & บทบาท</button>
+                        <button onclick="filterTable('process')" class="px-3 py-1.5 rounded-lg font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 transition">กระบวนการ & ข้อมูล</button>
+                        <button onclick="filterTable('people')" class="px-3 py-1.5 rounded-lg font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 transition">การพัฒนา & วัดผล</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-200 custom-scrollbar">
+                    <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-slate-800 text-white">
+                                <th class="p-3 sm:p-4 font-semibold w-1/4">มิติการเปรียบเทียบ</th>
+                                <th class="p-3 sm:p-4 font-semibold w-3/8 bg-slate-900/50">การจัดการทรัพยากรมนุษย์แบบดั้งเดิม (Traditional HRM)</th>
+                                <th class="p-3 sm:p-4 font-semibold w-3/8 bg-indigo-950/80 text-indigo-100">การจัดการทรัพยากรมนุษย์ยุคดิจิทัล (Digital HRM)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 bg-white" id="comparisonTableBody">
+                            <tr data-category="philosophy" class="hover:bg-slate-50 transition">
+                                <td class="p-3 sm:p-4 font-bold text-slate-900 bg-slate-50">ปรัชญาและวัตถุประสงค์หลัก</td>
+                                <td class="p-3 sm:p-4 text-slate-600">มุ่งเน้นการควบคุม การปฏิบัติตามกฎหมาย และการลดต้นทุนการจัดการแรงงาน (Cost Minimization)</td>
+                                <td class="p-3 sm:p-4 text-slate-800 font-medium bg-indigo-50/30">มุ่งเน้นการสร้างคุณค่าเชิงกลยุทธ์ ความยืดหยุ่นองค์กร และประสบการณ์ที่ดีของพนักงาน (Employee Experience)</td>
+                            </tr>
+                            <tr data-category="process" class="hover:bg-slate-50 transition">
+                                <td class="p-3 sm:p-4 font-bold text-slate-900 bg-slate-50">กระบวนการทำงาน</td>
+                                <td class="p-3 sm:p-4 text-slate-600">พึ่งพาเอกสารและการทำด้วยมือ (Paper-based/Manual) มีขั้นตอนซับซ้อนและใช้เวลานาน</td>
+                                <td class="p-3 sm:p-4 text-slate-800 font-medium bg-indigo-50/30">เป็นระบบอัตโนมัติ ทำงานผ่านแพลตฟอร์มคลาวด์ แอปพลิเคชันมือถือ และระบบ AI Workflow</td>
+                            </tr>
+                            <tr data-category="process" class="hover:bg-slate-50 transition">
+                                <td class="p-3 sm:p-4 font-bold text-slate-900 bg-slate-50">ฐานการตัดสินใจ</td>
+                                <td class="p-3 sm:p-4 text-slate-600">ใช้สัญชาตญาณ ประสบการณ์ของผู้บริหาร หรือธรรมเนียมปฏิบัติต่อๆ กันมา</td>
+                                <td class="p-3 sm:p-4 text-slate-800 font-medium bg-indigo-50/30">ใช้ข้อมูลเชิงประจักษ์ (Data-driven) การวิเคราะห์คาดการณ์ (Predictive Analytics) และ AI</td>
+                            </tr>
+                            <tr data-category="philosophy" class="hover:bg-slate-50 transition">
+                                <td class="p-3 sm:p-4 font-bold text-slate-900 bg-slate-50">บทบาทของฝ่าย HR</td>
+                                <td class="p-3 sm:p-4 text-slate-600">ผู้ดูแลงานสารบรรณ งานเงินเดือน และผู้รักษาวินัย/ระเบียบข้อบังคับองค์กร</td>
+                                <td class="p-3 sm:p-4 text-slate-800 font-medium bg-indigo-50/30">หุ้นส่วนเชิงกลยุทธ์ (Strategic Partner) ที่ปรึกษาธุรกิจ และผู้นำการปฏิรูปวัฒนธรรมดิจิทัล</td>
+                            </tr>
+                            <tr data-category="people" class="hover:bg-slate-50 transition">
+                                <td class="p-3 sm:p-4 font-bold text-slate-900 bg-slate-50">รูปแบบการพัฒนาบุคลากร</td>
+                                <td class="p-3 sm:p-4 text-slate-600">จัดอบรมแบบวงกว้างมาตรฐานเดียว (One-size-fits-all) ตามตารางเวลาประจำปี</td>
+                                <td class="p-3 sm:p-4 text-slate-800 font-medium bg-indigo-50/30">การเรียนรู้แบบเฉพาะบุคคล (Personalized Learning) บนแพลตฟอร์ม Adaptive Learning แบบเรียลไทม์</td>
+                            </tr>
+                            <tr data-category="people" class="hover:bg-slate-50 transition">
+                                <td class="p-3 sm:p-4 font-bold text-slate-900 bg-slate-50">การวัดผลความสำเร็จ</td>
+                                <td class="p-3 sm:p-4 text-slate-600">ประเมินจากกิจกรรม (Activity-based) เช่น จำนวนชั่วโมงอบรม หรือปริมาณเอกสารที่จัดการ</td>
+                                <td class="p-3 sm:p-4 text-slate-800 font-medium bg-indigo-50/30">ประเมินจากผลลัพธ์ธุรกิจ (Business Outcome) เช่น ผลิตภาพต่อพนักงาน อัตราการเร่งทักษะ และ ROI</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: AI ROLES & MECHANISMS IN 5 HR DOMAINS -->
+        <section id="ai-domains" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-semibold text-xs uppercase tracking-wider">
+                    <span>🤖 Section 2</span>
+                    <span>•</span>
+                    <span>AI Mechanisms in HR Lifecycle</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                    บทบาทและกลไกการประยุกต์ใช้ปัญญาประดิษฐ์ (AI) ใน 5 พันธกิจหลัก
+                </h3>
+                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                    สำรวจว่าเทคโนโลยี AI และ Generative AI เข้ามาเปลี่ยนผ่านกระบวนการทำงานตลอดวงจรชีวิตของพนักงาน (Employee Lifecycle) อย่างไร คลิกที่แต่ละโดเมนเพื่อดูเทคโนโลยี กลไกเชิงลึก และผลลัพธ์ที่วัดผลได้จริง
+                </p>
+            </div>
+
+            <!-- Domain Interactive Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3" id="domainTabContainer">
+                <button onclick="selectDomain(1)" id="domainBtn-1" class="domain-btn text-left p-4 rounded-2xl border border-indigo-600 bg-indigo-50/80 shadow-sm transition">
+                    <div class="text-xl mb-1">🎯</div>
+                    <div class="font-bold text-slate-900 text-xs sm:text-sm">1. การสรรหา & คัดเลือก</div>
+                    <div class="text-[11px] text-slate-500 mt-1">Predictive Hiring</div>
+                </button>
+                <button onclick="selectDomain(2)" id="domainBtn-2" class="domain-btn text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition">
+                    <div class="text-xl mb-1">📊</div>
+                    <div class="font-bold text-slate-900 text-xs sm:text-sm">2. บริหารผลงาน</div>
+                    <div class="text-[11px] text-slate-500 mt-1">Real-time & SHAP</div>
+                </button>
+                <button onclick="selectDomain(3)" id="domainBtn-3" class="domain-btn text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition">
+                    <div class="text-xl mb-1">🛡️</div>
+                    <div class="font-bold text-slate-900 text-xs sm:text-sm">3. รักษาพนักงาน</div>
+                    <div class="text-[11px] text-slate-500 mt-1">Turnover Risk & MILP</div>
+                </button>
+                <button onclick="selectDomain(4)" id="domainBtn-4" class="domain-btn text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition">
+                    <div class="text-xl mb-1">🎓</div>
+                    <div class="font-bold text-slate-900 text-xs sm:text-sm">4. พัฒนาทักษะ</div>
+                    <div class="text-[11px] text-slate-500 mt-1">Adaptive Learning</div>
+                </button>
+                <button onclick="selectDomain(5)" id="domainBtn-5" class="domain-btn text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition">
+                    <div class="text-xl mb-1">⚡</div>
+                    <div class="font-bold text-slate-900 text-xs sm:text-sm">5. ปฏิบัติการอัตโนมัติ</div>
+                    <div class="text-[11px] text-slate-500 mt-1">RPA & Workflow Bots</div>
+                </button>
+            </div>
+
+            <!-- Dynamic Domain Detail Display Card -->
+            <div id="domainDetailCard" class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 space-y-6 shadow-md transition-all">
+                <!-- Content injected via JS -->
+            </div>
+
+            <!-- Efficiency & Impact Comparison Chart -->
+            <div class="mt-8 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">ประเมินประสิทธิผลเชิงตัวเลขของการประยุกต์ใช้ AI ในงาน HR</h4>
+                        <p class="text-xs text-slate-500">อัตราการปรับปรุงประสิทธิภาพในมิติต่างๆ เมื่อนำระบบ AI เข้ามาใช้งาน</p>
+                    </div>
+                    <span class="text-xs bg-indigo-100 text-indigo-700 font-medium px-2.5 py-1 rounded-full w-fit">
+                        Data Source: Empirical Research Synthesis
+                    </span>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="aiEffectivenessChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: LABOR DEMAND & ECONOMIC IMPACT (WEF, McKinsey, GS Analytics) -->
+        <section id="labor-demand" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-semibold text-xs uppercase tracking-wider">
+                    <span>📈 Section 3</span>
+                    <span>•</span>
+                    <span>Labor Demand & Economic Analysis</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                    การวิเคราะห์ผลกระทบต่ออุปสงค์แรงงาน: การทดแทน ประสิทธิภาพ และงานใหม่
+                </h3>
+                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                    ตอบคำถามสำคัญ: <strong class="text-slate-900">"Digital HRM และ AI ทำให้ความต้องการแรงงานลดลงหรือไม่?"</strong> งานวิจัยชี้ชัดว่าไม่ใช่ปรากฏการณ์การลดลงแบบสุทธิ แต่เป็นการปรับโครงสร้างแรงงาน (Job Restructuring) จากการศึกษาของสถาบันระดับโลก (WEF, Goldman Sachs, McKinsey, ILO)
+                </p>
+            </div>
+
+            <!-- Grid with Chart and Multi-Source Key Facts -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Chart Column (7 cols) -->
+                <div class="lg:col-span-7 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">คาดการณ์การเปลี่ยนแปลงตำแหน่งงานโลกปี 2025-2030 (WEF)</h4>
+                        <span class="text-[11px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-medium">หน่วย: ล้านตำแหน่ง</span>
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        เปรียบเทียบระหว่างภาพรวมปัจจัยทั้งหมด กับเฉพาะผลกระทบจาก AI & IT Automation
+                    </p>
+                    
+                    <div class="chart-container">
+                        <canvas id="wefLaborChart"></canvas>
+                    </div>
+
+                    <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 space-y-1">
+                        <div class="font-bold text-emerald-800">💡 ข้อสรุปสุทธิ (Net Effect):</div>
+                        <p>
+                            • ปัจจัยรวมทั้งหมด: สร้างงานใหม่ 170M - ทดแทน 92M = <strong>เพิ่มขึ้นสุทธิ +78 ล้านตำแหน่ง</strong><br>
+                            • เฉพาะ AI/IT: สร้างงานใหม่ 11M - ทดแทน 9M = <strong>เพิ่มขึ้นสุทธิ +2 ล้านตำแหน่ง</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Research Insight Cards (5 cols) -->
+                <div class="lg:col-span-5 space-y-3">
+                    <h4 class="font-bold text-slate-900 text-sm">มุมมองจาก 4 สถาบันวิเคราะห์ระดับโลก</h4>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:border-indigo-300 transition space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-indigo-700">World Economic Forum (2025)</span>
+                            <span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-semibold">+78M Net</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ทักษะเดิมของแรงงานร้อยละ 39 จะล้าสมัย งานเน้นการคำนวณและป้อนข้อมูลเสี่ยงสูง แต่งานกลยุทธ์และการสร้างสรรค์ขยายตัว
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:border-indigo-300 transition space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-800">Goldman Sachs Research</span>
+                            <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">6-7% Displacement</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            แรงงาน 6-7% ในประเทศพัฒนาแล้วอาจถูกโยกย้ายตำแหน่งงาน แต่ไม่เกิดการว่างงานมวลชน แต่เกิดการย้ายไปสู่ภาคบริการขั้นสูง
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:border-indigo-300 transition space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-800">McKinsey Global Institute</span>
+                            <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">57% Technical Potential</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            57% ของชั่วโมงทำงานมีศักยภาพทางเทคนิคในการแปลงเป็นอัตโนมัติ ซึ่งเป็นศักยภาพทางเทคโนโลยี ไม่ใช่การพยากรณ์การเลิกจ้างทันที
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:border-indigo-300 transition space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-800">International Labour Organization</span>
+                            <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-semibold">1 in 4 Overlap</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            1 ใน 4 ของงานทั่วโลกคาบเกี่ยวกับ GenAI โดยเน้นการเสริมศักยภาพ (Augmentation) มากกว่าการทดแทน งานเสมียนเสี่ยงสูงสุด
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Secondary Impacts: Entry-level & Wage Premium -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">📉</span>
+                        <h4 class="font-bold text-amber-950 text-sm">ปรากฏการณ์บีบอัดตำแหน่งงานระดับเริ่มต้น (Entry-Level Compression)</h4>
+                    </div>
+                    <p class="text-xs text-amber-900 leading-relaxed">
+                        งานระดับเริ่มต้นที่เคยเป็นพื้นที่ฝึกฝนทักษะแรงงานจบใหม่ถูก AI ทำแทนได้อย่างรวดเร็ว ส่งผลให้อภิมหาองค์กรคาดหวังให้เด็กจบใหม่มีทักษะการตัดสินใจ วิจารณญาณ และการใช้ AI ในระดับสูงตั้งแต่วันแรกที่เข้าทำงาน
+                    </p>
+                </div>
+
+                <div class="bg-indigo-50/70 border border-indigo-200 rounded-2xl p-5 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">💎</span>
+                        <h4 class="font-bold text-indigo-950 text-sm">ความเหลื่อมล้ำทางรายได้จากส่วนต่างทักษะ (Skill Wage Premium)</h4>
+                    </div>
+                    <p class="text-xs text-indigo-900 leading-relaxed">
+                        แรงงานที่มีทักษะ AI ขั้นสูงสามารถสร้างส่วนต่างค่าจ้างได้สูงกว่าพนักงานในตำแหน่งเดียวกันถึง <strong class="text-indigo-700 text-sm">56%</strong> (ขยับขึ้นอย่างก้าวกระโดดจาก 25% ในปีก่อนหน้า) ชี้ให้เห็นว่ามูลค่ากระจุกตัวในกลุ่มที่มีทักษะดิจิทัลระดับสูง
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: HUMAN-AI WORKFLOW & SKILLS ADAPTATION STRATEGY -->
+        <section id="skills-strategy" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-semibold text-xs uppercase tracking-wider">
+                    <span>🧭 Section 4</span>
+                    <span>•</span>
+                    <span>Human-AI Synergy & Future Skills</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                    ยุทธศาสตร์การปรับตัวของแรงงาน โมเดลการทำงานใหม่ และชุดทักษะแห่งอนาคต
+                </h3>
+                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                    แรงงานจำเป็นต้องเปลี่ยนมุมมองจาก "ผู้ถูกทดแทน" ไปสู่ <strong class="text-slate-900">"ผู้กำกับดูแล AI (AI Supervisor)"</strong> ผ่านโมเดลการแบ่งบทบาทระหว่างมนุษย์กับ AI การเกิดขึ้นของอาชีพไฮบริดใหม่ และการเติมเต็ม 4 ชุดทักษะหลัก
+                </p>
+            </div>
+
+            <!-- Interactive Human-AI Synergy Loop Workflow Diagram -->
+            <div class="bg-slate-900 text-white rounded-2xl p-6 space-y-4">
+                <div class="text-center max-w-xl mx-auto space-y-1">
+                    <span class="text-[11px] font-bold text-amber-400 uppercase tracking-widest">Synergy Workflow Model</span>
+                    <h4 class="text-lg font-bold">วงจรการทำงานร่วมกันระหว่างมนุษย์และ AI (Human-in-the-Loop)</h4>
+                    <p class="text-xs text-slate-400">คลิกแต่ละขั้นตอนเพื่อความเข้าใจเชิงลึกในการแบ่งบทบาท</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2" id="workflowSteps">
+                    <button onclick="showWorkflowStep(1)" id="wfBtn-1" class="wf-btn text-left p-4 rounded-xl border border-amber-400 bg-amber-400/10 transition">
+                        <div class="text-xs text-amber-400 font-bold">ขั้นตอนที่ 1 (Human)</div>
+                        <div class="font-bold text-sm mt-1">1. ตั้งโจทย์ & บริบท</div>
+                        <div class="text-[11px] text-slate-300 mt-1">กำหนดเงื่อนไขและขอบเขตปัญหาในโลกจริง</div>
+                    </button>
+                    <button onclick="showWorkflowStep(2)" id="wfBtn-2" class="wf-btn text-left p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition">
+                        <div class="text-xs text-indigo-300 font-bold">ขั้นตอนที่ 2 (AI Machine)</div>
+                        <div class="font-bold text-sm mt-1">2. ประมวลผล & สังเคราะห์</div>
+                        <div class="text-[11px] text-slate-300 mt-1">ประมวลทางเลือกเชิงคำนวณและสร้างร่างผลลัพธ์</div>
+                    </button>
+                    <button onclick="showWorkflowStep(3)" id="wfBtn-3" class="wf-btn text-left p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition">
+                        <div class="text-xs text-amber-400 font-bold">ขั้นตอนที่ 3 (Human)</div>
+                        <div class="font-bold text-sm mt-1">3. ประเมินเชิงบริบท & จริยธรรม</div>
+                        <div class="text-[11px] text-slate-300 mt-1">ตรวจสอบความถูกต้องและมิติคุณค่ามนุษย์</div>
+                    </button>
+                    <button onclick="showWorkflowStep(4)" id="wfBtn-4" class="wf-btn text-left p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition">
+                        <div class="text-xs text-emerald-400 font-bold">ขั้นตอนที่ 4 (Human-in-Charge)</div>
+                        <div class="font-bold text-sm mt-1">4. ตัดสินใจ & รับผิดชอบ</div>
+                        <div class="text-[11px] text-slate-300 mt-1">ตัดสินใจขั้นสุดท้ายพร้อมรับผิดชอบผลลัพธ์</div>
+                    </button>
+                </div>
+
+                <div id="workflowDetailBox" class="p-4 rounded-xl bg-slate-800 border border-slate-700 text-xs sm:text-sm text-slate-200 leading-relaxed">
+                    <!-- Dynamic text injected by JS -->
+                </div>
+            </div>
+
+            <!-- New Hybrid AI Roles Cards -->
+            <div class="space-y-3">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">ตำแหน่งงานใหม่ที่เกิดขึ้นจากการผสานเทคโนโลยีและวิจารณญาณมนุษย์</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-indigo-400 transition">
+                        <span class="text-xs font-bold px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded">Architecture</span>
+                        <h5 class="font-bold text-slate-900 text-sm">สถาปนิกงานระบบ AI (AI System Architect)</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            แปลงปัญหาธุรกิจที่ซับซ้อนให้กลายเป็นโจทย์ที่ระบบ AI ประมวลผลได้ พร้อมออกแบบกระบวนการทำงานร่วมกัน
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-indigo-400 transition">
+                        <span class="text-xs font-bold px-2 py-0.5 bg-amber-100 text-amber-800 rounded">Governance</span>
+                        <h5 class="font-bold text-slate-900 text-sm">ผู้กำกับดูแลระบบ AI (AI Supervisor / Governor)</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ประเมินผลลัพธ์ ตรวจสอบความถูกต้อง ความเที่ยงธรรม และตัดสินใจยอมรับหรือยับยั้งการกระทำของ AI
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-indigo-400 transition">
+                        <span class="text-xs font-bold px-2 py-0.5 bg-cyan-100 text-cyan-800 rounded">Product</span>
+                        <h5 class="font-bold text-slate-900 text-sm">ผู้จัดการผลิตภัณฑ์ตัวแทน AI (AI Agent Product Manager)</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            บริหารจัดการระบบตัวแทนอัตโนมัติหลายตัว (Multi-agent Systems) ให้ทำงานสอดคล้องกับเป้าหมายองค์กร
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-indigo-400 transition">
+                        <span class="text-xs font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded">Engineering</span>
+                        <h5 class="font-bold text-slate-900 text-sm">วิศวกรคำสั่ง & ผู้ตรวจสอบมนุษย์ (Prompt Engineer & HITL)</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ปรับแต่งโมเดลภาษา ออกแบบคำสั่ง และทำหน้าที่ Human-in-the-Loop เพื่อสอบทานข้อมูลก่อนนำไปใช้
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Essential Skill Sets Matrix -->
+            <div class="space-y-4 pt-2">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">4 ชุดทักษะจำเป็น (Essential Skill Sets 2025-2030)</h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 font-bold text-xs">1</span>
+                            <h5 class="font-bold text-slate-900 text-sm">การคิดเชิงวิเคราะห์และการคิดเชิงระบบ (Analytical & Systems Thinking)</h5>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ความสามารถในการแยกแยะองค์ประกอบ มองเห็นความเชื่อมโยงของระบบที่ซับซ้อน และตั้งคำถามเชิงวิพากษ์เพื่อคัดกรองคำตอบที่ถูกต้องจากคำตอบที่ AI เจนขึ้นมา
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-amber-100 text-amber-700 font-bold text-xs">2</span>
+                            <h5 class="font-bold text-slate-900 text-sm">ความรู้เท่าทันเทคโนโลยีและ AI (AI & Technological Literacy)</h5>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ความเข้าใจในกลไก หลักการทำงาน ข้อจำกัด ตลอดจนอคติ (Bias) ของ AI เพื่อเลือกใช้เครื่องมือได้อย่างถูกต้อง ตรงจุด และปลอดภัยต่อข้อมูล
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-xs">3</span>
+                            <h5 class="font-bold text-slate-900 text-sm">ความยืดหยุ่นและการปรับตัว (Resilience & Adaptability)</h5>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ความพร้อมในการเรียนรู้สิ่งใหม่ (Learn) การละทิ้งความรู้เดิมที่ล้าสมัย (Unlearn) และการสร้างทักษะใหม่ (Relearn) อย่างต่อเนื่องสม่ำเสมอ
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-cyan-100 text-cyan-700 font-bold text-xs">4</span>
+                            <h5 class="font-bold text-slate-900 text-sm">ทักษะมนุษยสัมพันธ์และผู้นำเชิงจริยธรรม (Interpersonal & Ethical Leadership)</h5>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ความเข้าใจมนุษย์ การสร้างแรงบันดาลใจ การสื่อสารเพื่อสร้างความร่วมมือ และการตัดสินใจเชิงจริยธรรมในสภาวะที่มีความไม่แน่นอนสูง
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: STRATEGIC CONCLUSIONS & POLICY RECOMMENDATIONS -->
+        <section id="policy" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-semibold text-xs uppercase tracking-wider">
+                    <span>🏛️ Section 5</span>
+                    <span>•</span>
+                    <span>Policy Roadmap & Stakeholder Actions</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                    บทสรุปเชิงกลยุทธ์และข้อเสนอแนะเชิงนโยบายสำหรับ 3 กลุ่มผู้มีส่วนได้ส่วนเสีย
+                </h3>
+                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                    ข้อเสนอแนะจากการสังเคราะห์งานวิจัย เพื่อสร้างระบบนิเวศการเปลี่ยนผ่านทางเทคโนโลยีที่ยั่งยืน เป็นธรรม และเพิ่มขีดความสามารถในการแข่งขันระดับประเทศ
+                </p>
+            </div>
+
+            <!-- Stakeholder Recommendation Tabs Switcher -->
+            <div class="space-y-4">
+                <div class="flex border-b border-slate-200 space-x-4 text-xs sm:text-sm font-bold">
+                    <button onclick="switchPolicyTab('hr')" id="policyTab-hr" class="pb-3 border-b-2 border-indigo-600 text-indigo-600 transition">
+                        🏢 สำหรับผู้บริหาร & HR องค์กร
+                    </button>
+                    <button onclick="switchPolicyTab('worker')" id="policyTab-worker" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition">
+                        👷 สำหรับแรงงาน & พนักงาน
+                    </button>
+                    <button onclick="switchPolicyTab('policy')" id="policyTab-policy" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition">
+                        🎓 สำหรับรัฐบาล & สถาบันการศึกษา
+                    </button>
+                </div>
+
+                <!-- Tab 1: HR & Business -->
+                <div id="policyContent-hr" class="space-y-3">
+                    <div class="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 space-y-2">
+                        <h4 class="font-bold text-indigo-950 text-sm">1. เปลี่ยนผ่านสู่ Strategic & Human-centric HRM Model</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            นำเทคโนโลยีมาใช้ลดงานธุรการ ควบคู่กับการมุ่งเน้นสร้างสุขภาวะทางจิตวิทยาของพนักงานเพื่อป้องกันปัญหาความเครียดทางเทคโนโลยี (Technostress) และรักษาบุคลากรสำคัญ
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 space-y-2">
+                        <h4 class="font-bold text-indigo-950 text-sm">2. ออกแบบงานใหม่เชิงรุก (Proactive Job Redesign)</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            ระบุบทบาทการทำงานร่วมกันระหว่างคนและ AI ให้ชัดเจน ชะลอการเลิกจ้างด้วยการวางแผนปรับเปลี่ยนตำแหน่งภายใน (Internal Mobility) และการลงทุนยกระดับทักษะแรงงานเดิม (Upskilling)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Workers -->
+                <div id="policyContent-worker" class="hidden space-y-3">
+                    <div class="p-4 rounded-2xl bg-amber-50/50 border border-amber-100 space-y-2">
+                        <h4 class="font-bold text-amber-950 text-sm">1. พัฒนาทักษะการเป็น "ผู้กำกับดูแล AI" (AI Supervisor Mindset)</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            สร้างความเชี่ยวชาญในสาขาอาชีพตนเองควบคู่กับความรู้เท่าทันเทคโนโลยี เพื่อทำหน้าที่ตั้งโจทย์ กำหนดเงื่อนไข และประเมินผลลัพธ์จาก AI อย่างมีประสิทธิภาพ
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-amber-50/50 border border-amber-100 space-y-2">
+                        <h4 class="font-bold text-amber-950 text-sm">2. สร้างวัฒนธรรมการเรียนรู้ตลอดชีวิต (Lifelong Learning)</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            ยอมรับความจริงว่าทักษะเดิมมีอายุสั้นลง หมั่นประเมินช่องว่างทักษะของตนเองเทียบกับความต้องการของตลาดงานปี 2025-2030 และแสวงหาโอกาสเรียนรู้บนแพลตฟอร์มดิจิทัล
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Policymakers -->
+                <div id="policyContent-policy" class="hidden space-y-3">
+                    <div class="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 space-y-2">
+                        <h4 class="font-bold text-emerald-950 text-sm">1. ปฏิรูปหลักสูตรการศึกษาทุกระดับชั้น</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            บูรณาการทักษะดิจิทัล การคิดเชิงระบบ และความรู้เท่าทัน AI เข้าไปในระบบการศึกษา เพื่อเตรียมพร้อมเด็กและเยาวชนก่อนเข้าสู่ตลาดแรงงานยุคใหม่
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 space-y-2">
+                        <h4 class="font-bold text-emerald-950 text-sm">2. สร้างมาตรการจูงใจและกฎหมายคุ้มครองแรงงานดิจิทัล</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            ออกมาตรการจูงใจทางภาษีแก่ภาคเอกชนที่ลงทุนปรับทักษะพนักงาน พร้อมพัฒนากฎหมายคุ้มครองแรงงานดิจิทัลเพื่อป้องกันการเลือกปฏิบัติจากอัลกอริทึมและสร้างตาข่ายรองรับทางสังคม
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="font-bold text-slate-200">Digital HRM & AI Research Synthesis Dashboard</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">พัฒนาจากรายงานวิจัยการกลายพันธุ์ของการจัดการทรัพยากรมนุษย์ยุคดิจิทัล</p>
+            </div>
+            <div class="text-center sm:text-right text-[11px] text-slate-500">
+                <p>Data Sources: WEF Future of Jobs, Goldman Sachs, McKinsey, ILO</p>
+                <p class="mt-0.5">Single Page Application Architecture • No SVG / No Mermaid JS</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // DOMAIN DATA STORAGE
+        const domainData = {
+            1: {
+                title: "1. การสรรหาและคัดเลือกบุคลากรแบบคาดการณ์ (Predictive Recruitment)",
+                icon: "🎯",
+                tech: "NLP, Predictive Algorithms, AI Conversational Agents, Behavioral Analytics",
+                mechanism: "ประมวลผลใบสมัครจำนวนมากในเวลาไม่กี่วินาที คัดกรองคุณสมบัติ คาดการณ์โอกาสสำเร็จและความคงอยู่ในองค์กร รวมถึงสื่อสารตอบคำถามและนัดหมายผ่าน AI Agents",
+                impact: "ลดเวลาคัดเลือกลง 40-60%, ลดต้นทุนการสรรหา, ลดอคติของมนุษย์ในขั้นตอนคัดกรองด่านแรก",
+                highlightColor: "text-cyan-400"
+            },
+            2: {
+                title: "2. การบริหารผลการปฏิบัติงานและการวิเคราะห์เชิงลึก (Performance & Deep Analytics)",
+                icon: "📊",
+                tech: "SHAP Framework, Continuous Data Analytics, Machine Learning Models",
+                mechanism: "เปลี่ยนการประเมินปีละครั้งเป็นแบบเรียลไทม์ รวบรวมข้อมูลจากระบบงานสื่อสารเพื่อวิเคราะห์ผลิตภาพ ใช้ SHAP แสดงปัจจัยที่มีอิทธิพลต่อผลงานอย่างโปร่งใส",
+                impact: "เพิ่มความโปร่งใสและเที่ยงธรรม, ให้ผลตอบแทนและเลื่อนตำแหน่งอย่างมีหลักฐานอ้างอิงชัดเจน",
+                highlightColor: "text-amber-400"
+            },
+            3: {
+                title: "3. การรักษาบุคลากรและการวิเคราะห์ความเสี่ยง (Turnover Risk Analytics)",
+                icon: "🛡️",
+                tech: "Predictive Machine Learning, MILP Optimization (Mixed-Integer Linear Programming)",
+                mechanism: "วิเคราะห์รูปแบบการใช้วันหยุด พฤติกรรมดิจิทัล เพื่อแจ้งเตือนความเสี่ยงการลาออกล่วงหน้า พร้อมใช้อัลกอริทึมคำนวณงบประมาณรักษากรณีวิกฤตภายใต้ข้อจำกัดงบ",
+                impact: "ลดอัตราการลาออกของบุคลากรสำคัญเชิงกลยุทธ์ ป้องกันความเสียหายทางเศรษฐกิจขององค์กร",
+                highlightColor: "text-rose-400"
+            },
+            4: {
+                title: "4. การเรียนรู้และพัฒนาบุคลากรแบบเฉพาะบุคคล (Personalized L&D)",
+                icon: "🎓",
+                tech: "Generative AI, Adaptive Recommendation Engines, Skill Gap Analytics",
+                mechanism: "ประเมินช่องว่างทักษะพนักงานเทียบเป้าหมายองค์กร แล้วจัดเส้นทางการเรียนรู้ คอร์ส หรือโครงการทดลองปฏิบัติที่เหมาะกับสไตล์พนักงานแบบอัตโนมัติ",
+                impact: "เพิ่มความเร็วในการเรียนรู้ทักษะใหม่ เร่งพัฒนาขีดความสามารถแข่งขันให้สอดรับเทคโนโลยี",
+                highlightColor: "text-emerald-400"
+            },
+            5: {
+                title: "5. การแปลงกระบวนการปฏิบัติการ HR เป็นระบบอัตโนมัติ (HR Operations Automation)",
+                icon: "⚡",
+                tech: "RPA (Robotic Process Automation), Generative AI Workflow Bots",
+                mechanism: "ทำให้อัตโนมัติในงานธุรการซ้ำซาก เช่น ลงทะเบียนพนักงานใหม่ จัดสรรสิทธิ์ อนุมัติวันลา ตอบนโยบายบริษัท ผ่านแชตบอตและเวิร์กโฟลว์อัตโนมัติ",
+                impact: "ลดภาระงานธุรการของ HR ลงมากกว่า 70% ปลดล็อกเวลาให้ HR ไปเน้นงานเชิงกลยุทธ์",
+                highlightColor: "text-indigo-400"
+            }
+        };
+
+        // WORKFLOW STEPS DATA STORAGE
+        const workflowData = {
+            1: {
+                title: "ขั้นตอนที่ 1: การตั้งโจทย์และกำหนดบริบท (Human Role)",
+                detail: "มนุษย์ (HR/ผู้บริหาร) ทำหน้าที่ทำความเข้าใจความต้องการทางธุรกิจ กำหนดขอบเขตของปัญหา ค่านิยมองค์กร มิติทางสังคม และเงื่อนไขในโลกจริง แล้วแปลงเป็นข้อสั่งการ (Prompts/Parameters) ที่ชัดเจนให้แก่ระบบ AI"
+            },
+            2: {
+                title: "ขั้นตอนที่ 2: การประมวลผลเชิงคำนวณและสังเคราะห์ (AI Machine Role)",
+                detail: "ระบบ AI ทำหน้าที่ประมวลผลข้อมูลขนาดใหญ่ คำนวณความน่าจะเป็น สังเคราะห์ทางเลือก ร่างเนื้อหา หรือประมวลผลโมเดลทางสถิติอย่างรวดเร็วเกินกว่าที่มนุษย์จะทำได้ด้วยมือ"
+            },
+            3: {
+                title: "ขั้นตอนที่ 3: การประเมินผลเชิงบริบทและจริยธรรม (Human Role)",
+                detail: "มนุษย์รับผลลัพธ์จาก AI มาทำการตรวจสอบความถูกต้อง ตรวจหาอคติ (Bias Validation) พิจารณาผลกระทบด้านความรู้สึก จริยธรรม วัฒนธรรมองค์กร และความคุ้มค่าเชิงกลยุทธ์"
+            },
+            4: {
+                title: "ขั้นตอนที่ 4: การตัดสินใจขั้นสุดท้ายและการรับผิดชอบ (Human-in-Charge)",
+                detail: "มนุษย์ทำหน้าที่อนุมัติ ตัดสินใจเลือกแนวทางปฏิบัติ และพร้อมรับผิดชอบต่อผลลัพธ์ทางกฎหมายและสังคม เนื่องจาก AI เป็นเพียงผู้ช่วยประมวลผล แต่ความรับผิดชอบขั้นสุดท้ายยังคงเป็นของมนุษย์เสมอ"
+            }
+        };
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDomainDetail(1);
+            renderWorkflowDetail(1);
+            initAiEffectivenessChart();
+            initWefLaborChart();
+        });
+
+        // DOMAIN SELECTION LOGIC
+        function selectDomain(id) {
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`domainBtn-${i}`);
+                if (i === id) {
+                    btn.className = "domain-btn text-left p-4 rounded-2xl border border-indigo-600 bg-indigo-50/80 shadow-sm transition";
+                } else {
+                    btn.className = "domain-btn text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition";
+                }
+            }
+            renderDomainDetail(id);
+        }
+
+        function renderDomainDetail(id) {
+            const data = domainData[id];
+            const card = document.getElementById('domainDetailCard');
+            card.innerHTML = `
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">${data.icon}</span>
+                        <div>
+                            <span class="text-xs text-indigo-400 font-semibold uppercase tracking-wider">AI Application Domain #${id}</span>
+                            <h4 class="text-base sm:text-xl font-bold text-white">${data.title}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs sm:text-sm">
+                    <div class="space-y-1.5 bg-slate-800/60 p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-slate-300">🛠️ เทคโนโลยี AI ที่ใช้:</div>
+                        <p class="text-slate-300 leading-relaxed">${data.tech}</p>
+                    </div>
+                    <div class="space-y-1.5 bg-slate-800/60 p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-slate-300">⚙️ กลไกการทำงานหลัก:</div>
+                        <p class="text-slate-300 leading-relaxed">${data.mechanism}</p>
+                    </div>
+                    <div class="space-y-1.5 bg-slate-800/60 p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-emerald-400">📈 ผลลัพธ์เชิงวัดผลต่อองค์กร:</div>
+                        <p class="text-emerald-300 font-medium leading-relaxed">${data.impact}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // WORKFLOW DIAGRAM LOGIC
+        function showWorkflowStep(step) {
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`wfBtn-${i}`);
+                if (i === step) {
+                    btn.className = "wf-btn text-left p-4 rounded-xl border border-amber-400 bg-amber-400/10 transition";
+                } else {
+                    btn.className = "wf-btn text-left p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition";
+                }
+            }
+            renderWorkflowDetail(step);
+        }
+
+        function renderWorkflowDetail(step) {
+            const data = workflowData[step];
+            const box = document.getElementById('workflowDetailBox');
+            box.innerHTML = `
+                <div class="font-bold text-amber-300 mb-1">${data.title}</div>
+                <p class="text-slate-300">${data.detail}</p>
+            `;
+        }
+
+        // TABLE FILTER LOGIC
+        function filterTable(category) {
+            const rows = document.querySelectorAll('#comparisonTableBody tr');
+            const btns = document.querySelectorAll('#tableFilterBtns button');
+
+            btns.forEach(btn => {
+                btn.className = "px-3 py-1.5 rounded-lg font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 transition";
+            });
+            event.currentTarget.className = "px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white shadow-sm transition";
+
+            rows.forEach(row => {
+                if (category === 'all' || row.dataset.category === category) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // POLICY TAB SWITCHER
+        function switchPolicyTab(tab) {
+            const hrBtn = document.getElementById('policyTab-hr');
+            const workerBtn = document.getElementById('policyTab-worker');
+            const policyBtn = document.getElementById('policyTab-policy');
+
+            const hrContent = document.getElementById('policyContent-hr');
+            const workerContent = document.getElementById('policyContent-worker');
+            const policyContent = document.getElementById('policyContent-policy');
+
+            // Reset active styles
+            [hrBtn, workerBtn, policyBtn].forEach(b => {
+                b.className = "pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition";
+            });
+            [hrContent, workerContent, policyContent].forEach(c => c.classList.add('hidden'));
+
+            if (tab === 'hr') {
+                hrBtn.className = "pb-3 border-b-2 border-indigo-600 text-indigo-600 font-bold transition";
+                hrContent.classList.remove('hidden');
+            } else if (tab === 'worker') {
+                workerBtn.className = "pb-3 border-b-2 border-indigo-600 text-indigo-600 font-bold transition";
+                workerContent.classList.remove('hidden');
+            } else if (tab === 'policy') {
+                policyBtn.className = "pb-3 border-b-2 border-indigo-600 text-indigo-600 font-bold transition";
+                policyContent.classList.remove('hidden');
+            }
+        }
+
+        // GLOBAL SEARCH FILTER
+        function filterGlobalContent() {
+            const input = document.getElementById('globalSearchInput').value.toLowerCase();
+            const textNodes = document.querySelectorAll('main section');
+
+            textNodes.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (input === '' || text.includes(input)) {
+                    section.style.opacity = '1';
+                    section.style.filter = 'none';
+                } else {
+                    section.style.opacity = '0.3';
+                    section.style.filter = 'grayscale(80%)';
+                }
+            });
+        }
+
+        // CHART 1: AI Effectiveness
+        function initAiEffectivenessChart() {
+            const ctx = document.getElementById('aiEffectivenessChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'ลดภาระงานธุรการ (Admin Load Reduction)',
+                        'ลดเวลาการสรรหา (Recruitment Time Saved)',
+                        'ส่วนต่างค่าจ้างทักษะ AI (AI Skill Salary Premium)',
+                        'สัดส่วนงานที่มีศักยภาพใช้ AI (McKinsey Automation Potential)'
+                    ],
+                    datasets: [{
+                        label: 'เปอร์เซ็นต์ประสิทธิผล (%)',
+                        data: [70, 50, 56, 57],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.85)',
+                            'rgba(6, 182, 212, 0.85)',
+                            'rgba(245, 158, 11, 0.85)',
+                            'rgba(16, 185, 129, 0.85)'
+                        ],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ประสิทธิผล: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) { return value + '%'; }
+                            },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        y: {
+                            ticks: {
+                                font: { family: 'Prompt', size: 11 },
+                                callback: function(value) {
+                                    let label = this.getLabelForValue(value);
+                                    if (label.length > 16) {
+                                        return label.substring(0, 16) + '...';
+                                    }
+                                    return label;
+                                }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // CHART 2: WEF Global Labor Shift
+        function initWefLaborChart() {
+            const ctx = document.getElementById('wefLaborChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ตำแหน่งที่ถูกทดแทน (Displaced)', 'ตำแหน่งที่สร้างใหม่ (Created)', 'ผลกระทบสุทธิ (Net Effect)'],
+                    datasets: [
+                        {
+                            label: 'รวมทุกปัจจัย (Total World 2025-2030)',
+                            data: [-92, 170, 78],
+                            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'เฉพาะปัจจัย AI & IT Automation',
+                            data: [-9, 11, 2],
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { font: { family: 'Prompt', size: 11 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.dataset.label}: ${context.raw > 0 ? '+' : ''}${context.raw} ล้านตำแหน่ง`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: '#f1f5f9' },
+                            ticks: {
+                                callback: function(value) { return value + 'M'; }
+                            }
+                        },
+                        x: {
+                            ticks: { font: { family: 'Prompt', size: 11 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
